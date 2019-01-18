@@ -32,19 +32,24 @@ public class Test {
 		
 		U.anagram();
 		U.anagramPrime();
+		Utility.insertionSortString();
 		*/
 		
-		System.out.println("Enter the size of array");
+		/*System.out.println("Enter the size of array");
 		int j,i=s.nextInt();
-		/*
-		 * int [] array=new int[i];
+		
+	 	int [] array=new int[i];
 		System.out.println("Enter the array");
-		for(int j=0;j<i;j++) {
+		for(j=0;j<i;j++) {
 			array[j]=s.nextInt();
 		}
 		System.out.println("Enter the number to be searched");
 		i=s.nextInt();
 		*/
+		/**
+		 * Binary search of String
+		 */
+		/*
 		String array[]=new String[i];
 		System.out.println("Enter the array");
 		for(j=0;j<i;j++) {
@@ -52,7 +57,8 @@ public class Test {
 		}
 		System.out.println("Enter the string to be searched");
 		String search=s.next();
-		Utility.BinarySearch(array,search);
-		
+		*/
+
+		U.guessGame(Integer.parseInt(args[0]));
 		}
 }

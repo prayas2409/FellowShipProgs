@@ -16,7 +16,7 @@ import java.util.Scanner;
 
 public class Utility {
 	
-	Scanner s=new Scanner(System.in);
+	static Scanner s=new Scanner(System.in);
 	
 	//This class is used to create a linked list of users
 	class Users{
@@ -349,59 +349,49 @@ public class Utility {
 		System.out.println("The distance from 0,0 to the current point is "+ (Math.sqrt(x*x+y*y)));
 	}
 
-	String findString(char c,String rest,String upto,int num,int length) {
 		
-		int k=1,i=0,j=1,flag=0,factorialleft=length-num;
-		String temp;
-		//getting probability for the current index
-		j=j*factorialleft--; 
+	void permute(char currentchar,String array,int num,String upto,int originallength) {
+		int i;
+		num++;
 		
-		for(i=0;num<length && i<length;i++) {
-			num++;
-	//		findString(rest.charAt(i),temp,upto,num,rest.length()); 
-			
-			
+	//	System.out.println("Received "+currentchar+" "+array);
+		if(num==originallength-1) {
+			System.out.println("String is "+upto+" "+currentchar);
+			return;
 		}
+		else {
+			for(i=0;i<originallength-num;i++) {
+				
+		//		System.out.print(currentchar);
 		
-		/*
-		 * while(length>num) {
-			for(k=0;k<length;k++) {
-				for(i=0;i<num;i++) {
-					if (ain[i]==k)  flag=1;
-				}
-				if(flag==0) {
-					num++;
-					upto=upto+rest.charAt(k);
-					ain[num-1]=k;
-				}
-			
-			}	
-			findString(rest,upto,num,ain,index,length);
+				currentchar=array.charAt(i);
+				upto=upto+currentchar;
+				String temp=new StringBuffer(array).deleteCharAt(i).toString();
+				//upto=Character.toString(array.charAt(i));
+		//		System.out.println("sending "+currentchar+" "+ array);
+				permute(currentchar,temp,num,upto,originallength);
+				upto=new StringBuffer(upto).delete(originallength-num,(originallength-1)).toString();
+				temp=array;
+			}
+			return;
 		}
-		*/
-		
-		
-		
-		if(length==num) {
-			
-			System.out.println("The permutation for "+rest.charAt(i)+" is "+upto);
-			num=0;
-			upto="";
-		}
-		return upto;
 	}
+	
 	void permutations() {
-		String array,temp,curcharstring;
-		String currentchar;
+		String array,temp,upto;
+		char currentchar;
 		System.out.println("Enter the string");
 		array=s.next();
 		temp=array;
 		int i;
 		int []j= new int[array.length()];
 		for(i=0;i<array.length();i++) {
-			temp= new StringBuilder(array).deleteCharAt(i).toString();
-			currentchar=Character.toString(array.charAt(i));	
+			System.out.println(i);
+			temp= new StringBuilder(array).deleteCharAt(i).toString();			
+			currentchar=array.charAt(i);	
 			//findString(currentchar,temp,"",0,j,i,array.length()); 
+			System.out.println("for "+array.charAt(i));
+			permute(currentchar,temp,0,Character.toString(array.charAt(i)),array.length());
 			temp=array;
 		}	
 	}
@@ -416,7 +406,7 @@ public class Utility {
 		System.out.println("press enter key to stop ");
 		s.hasNextLine();
 			stop=System.nanoTime()/1000000000;
-			System.out.println("Elapsed time between "+start+" and "+stop+" is "+(start-stop));
+			System.out.println("Elapsed time between "+start+" and "+stop+" is "+(stop-start));
 	}
 
 	int valueAtPosition(int [][]array,int index) {
@@ -672,6 +662,7 @@ public class Utility {
 			}
 		}
 		for(i=0;i<a.length;i++) System.out.print(a[i]+" ");
+		System.out.println();
 		return a;
 		
 	}
@@ -693,6 +684,7 @@ public class Utility {
 			}
 		}
 		for(i=0;i<a.length;i++) System.out.print(a[i]+" ");
+		System.out.println();
 		return a;
 		
 	}
@@ -797,7 +789,7 @@ public class Utility {
 	}
 
 	
-	static void BinarySearch(int array[],int num){
+	static void binarySearch(int array[],int num){
 			int i,length,low,high,mid;
 		array=sortInt(array);
 		length=array.length;
@@ -806,7 +798,7 @@ public class Utility {
 		high=length-1;
 		
 	
-		for(i=0;i<length/2;i++) {
+		for(i=0;i<length/2+1;i++) {
 			mid=(low+high)/2;
 			if(num==array[mid]) {
 				System.out.println("Number found at position "+(mid+1));
@@ -816,7 +808,7 @@ public class Utility {
 				high=mid;				
 			}
 			else {
-				low=mid;
+				low=mid+1;
 			}
 		}
 		System.out.println("Number not found");
@@ -825,30 +817,291 @@ public class Utility {
 	static void BinarySearch(String [] array,String num){
 			
 			array=sortString(array);
-			int i,length,low,high,mid;
-			array=sortString(array);
+			int flag,i,length,low,high,mid;
+			
 			length=array.length;
 			low=0;
 			high=length-1;
-			for(i=0;i<length/2;i++) {
+			for(i=0;i<length;i++) {
 				
 				mid=(low+high)/2;
-				System.out.println(mid+" "+num.equals(array[mid])+" ");
 				
-				if(num.equals(array[mid])) {
+				//System.out.println("we are finding at "+mid+" and high = "+high);
+				
+				flag=num.compareTo(array[mid]);
+				if(flag==0){
 					System.out.println("string found at position "+(mid+1));
 					return;
 				}
-				int flag=num.compareTo(array[i]);
-				if(flag>0) {
+				
+			//	System.out.println(" "+flag+" when compared "+num+", "+array[mid]);
+				if(flag<0) {
 					high=mid;		
 				}
 				else {
-					low=mid;
+					low=mid+1;
 				}
 			}
 			System.out.println("String not found");
 			
 		}
+	
+	static int [] swipeInt(int array[],int index,int till) {
+		int j;
+		for(j=index;j>=1;j--) {
+			array[j]=array[j-1];
+		}
+		return array;
+	}
+	
+	static String [] swipeInt(String array[],int index,int till) {
+		int j;
+		for(j=index;j>=1;j--) {
+			array[j]=array[j-1];
+		}
+		return array;
+	}
+	
+	
+	static int[] insertionSort(int []array,int length) {
+		int i,j,temp,index;
+	
+		for(j=0;j<length;j++) {	
+		//System.out.println("In j= "+j);
+			for(i=j+1;i<length;i++) {
+					if(array[j]>array[i]) {
+					temp=array[i];
+					index=i;
+					array=swipeInt(array,index,i);
+					array[j]=temp;		
+				//	System.out.println("Array after swipe ");
+					//for(int c=0;c<length;c++)System.out.print(" "+array[c]);
+				//	System.out.println();						
+				}
+			}
+		}
+		//System.out.println("The sorted array is");
+		//for(i=0;i<length;i++) System.out.print(" "+array[i]);
+		return array;
+	}
+	
+	static String[] insertionSortString(String[]array,int length) {
+		int i,j,index;
+		String temp;	
+		
+		for(j=0;j<length;j++) {	
+		//System.out.println("In j= "+j);
+			for(i=j+1;i<length;i++) {
+					if(array[j].compareTo(array[i])>1) {
+					temp=array[i];
+					index=i;
+					array=swipeInt(array,index,i);
+					array[j]=temp;		
+					//System.out.println("Array after swipe ");
+				//	for(int c=0;c<length;c++)System.out.print(" "+array[c]);
+				//	System.out.println();						
+				}
+			}
+		}
+	//	System.out.println("The sorted array is");
+		//for(i=0;i<length;i++) System.out.print(" "+array[i]);
+		return array;
+	}
+	
+	static int[] bubbleSortInt(int []array,int length) {
+		
+		int i,j,temp;
+			for(i=0;i<length;i++) {
+			for(j=0;j<length-1;j++) {
+				if(array[j]>array[j+1]) {
+					temp=array[i];
+					array[i]=array[j];
+					array[j]=temp;
+				}
+			}
+		}
+		//System.out.println("The sorted array is");
+	//	for(i=0;i<length;i++) System.out.print(" "+array[i]);
+			return array;
+	}
+	
+	static String[] bubbleSortString(String []array,int length) {
+		
+		int i,j;
+		String temp;
+			
+		for(i=0;i<length;i++) {
+			for(j=0;j<length-1;j++) {
+				if(array[j].compareTo(array[j+1])>1) {
+					temp=array[j];
+					array[j]=array[j+1];
+					array[j+1]=temp;
+				}
+			}
+		}
+//		System.out.println("The sorted array is");
+//		for(i=0;i<length;i++) {
+//			System.out.print(" "+array[i]);
+//		}
+		return array;
+	}
+
+	static void callSortandSearch() {
+		
+		double start=0,stop=0;
+		
+	int intlength,stringlength,i,j;
+	System.out.println("Enter the length of integer array");
+	intlength=s.nextInt();
+	int []array= new int[intlength]; //integer array
+	System.out.println("Enter the array");
+	for(i=0;i<intlength;i++) array[i]=s.nextInt();
+	
+	System.out.println("Enter the length of string array");
+	stringlength=s.nextInt();
+	String [] stringarray=new String[stringlength]; 
+	System.out.println("Enter the array");
+	
+	for(i=0;i<stringlength;i++) stringarray[i]=s.next();
+			//stopwatch
+	double []times= new double[6];	
+	String []S=new String[6];
+	
+			start=System.nanoTime();
+			array=insertionSort(array,intlength);
+			stop=System.nanoTime();
+			times[0]=stop-start;
+			S[0]="InsertionsortInt";
+			
+			System.out.println("After insertion sort int");
+			
+			start=System.nanoTime();
+			stringarray=insertionSortString(stringarray,stringlength);
+			stop=System.nanoTime();
+			times[1]=stop-start;
+			S[1]="InsertionsortString";
+			
+			System.out.println("After insertion sort string");
+			
+			start=System.nanoTime();
+			array=bubbleSortInt(array,intlength);
+			stop=System.nanoTime();
+			times[2]=stop-start;
+			S[2]="bulleSortInt";
+
+			System.out.println("After bubble sort int");
+			
+			start=System.nanoTime();
+			stringarray=bubbleSortString(stringarray,stringlength);
+			stop=System.nanoTime();
+			times[3]=stop-start;
+			S[3]="bubbleSortString";
+			
+			System.out.println("After bubble sort string");
+			
+			System.out.println("Enter the number to be searched");
+			int num=s.nextInt();
+			
+			start=System.nanoTime();
+			binarySearch(array,num);
+			stop=System.nanoTime();
+			times[4]=stop-start;
+			S[4]="binarysearchint";
+			
+			System.out.println("After binary search int");
+			
+			System.out.println("Enter the string to be searched");
+			String search=s.next(); 
+			start=System.nanoTime();
+			BinarySearch(stringarray,search);
+			stop=System.nanoTime();
+			times[5]=stop-start;
+			S[5]="binarysearchString";
+			
+			System.out.println("After binary search String");
+			
+			double t;
+			String change;
+			
+			for(i=0;i<times.length;i++) {
+				for(j=0;j<times.length-1;j++) {
+					if(times[j]<times[j+1]) {
+						t=times[i];
+						change=S[i];
+						times[i]=times[j];
+						S[i]=S[j];
+						times[j]=t;
+						S[j]=change;
+					}
+				}
+			}
+			//printing the times taken 
+			System.out.println("Times in descending order are");
+			
+			for(i=0;i<times.length;i++) System.out.println("Time for :"+S[i]+" is "+times[i]+" milliseconds");
+			
+		}
+
+	//to check a number is a power of 2
+	int power=1;
+
+	int check2Power(int num) {
+		int flag=0;
+		while(num%2==0) {
+			if(num%2==0) {
+				num=num/2;
+				power++;
+			}
+			if(num/2==1 && num%2==0) {
+				flag=1;
+				break;
+			}
+		}
+		return flag;
+}
+	
+	void guessGame(int num) {
+		
+		System.out.println("Thank you for entering the number:"+num+" let me check");
+		int t,low,high,mid;
+		int flag=check2Power(num);
+		 
+		while(flag==0) {
+			System.out.println("Please enter the number which is a power of 2 only");
+			power=1; // class variable to calculate value of n in 2^n
+			num=s.nextInt();
+			
+			flag=check2Power(num);
+		}
+		int []array=new int[num];
+		for(t=0;t<num;t++) array[t]=t;
+		low=0;
+		high=num-1;
+		//System.out.println(power);
+		for(;power>0;power--) {
+						
+				mid=(low+high)/2;
+				
+				System.out.println("Is the number "+array[mid]+" If yes type 'true' else type 'false'");
+					if(s.nextBoolean()==true) {
+					System.out.println("You won");
+					return;
+				}
+				else {
+					System.out.println("Is the number more than "+array[mid]+" ? If yes type 'true' else type 'false");
+										
+					if(s.nextBoolean()==true) low=mid+1;	
+					
+					else high=mid;
+				}
+		}	
+	System.out.println("Number not found");
+	}
+	
+	void wordList() {
+		
+		
+		
+	}
 	
 }
