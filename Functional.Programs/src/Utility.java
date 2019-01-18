@@ -6,6 +6,7 @@
  */
 import java.awt.print.Printable;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -1098,9 +1099,20 @@ public class Utility {
 	System.out.println("Number not found");
 	}
 	
-	void wordList() {
+	void wordList() throws IOException {
 		
+		FileWriter fw=new FileWriter("WordList.txt");
+		int i,j;
+		String strings;
+		System.out.println("Please enter the number of words you wish to add to file");
+		i=s.nextInt();
+		for(j=0;j<i;j++) {
+			strings=s.next();
+			fw.write(strings+',');
+		}
+		fw.close();
 		
+		FileReader fr=new FileReader("WordList.txt");
 		
 	}
 	
