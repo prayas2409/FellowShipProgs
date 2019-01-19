@@ -57,8 +57,14 @@ public class Test {
 		}
 		System.out.println("Enter the string to be searched");
 		String search=s.next();
+		
+		U.guessGame(Integer.parseInt(args[0]));
+		U.wordList();
+		U.insertionsortinstring();
 		*/
 
-		U.guessGame(Integer.parseInt(args[0]));
-		}
+		//U.bubbleIntList();
+		//U.vendingMachine();
+		U.permutations();
+	}
 }

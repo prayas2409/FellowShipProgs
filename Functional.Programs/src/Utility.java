@@ -5,12 +5,14 @@
  * Version 11.0.1
  */
 import java.awt.print.Printable;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
@@ -363,13 +365,14 @@ public class Utility {
 		else {
 			for(i=0;i<originallength-num;i++) {
 				
-		//		System.out.print(currentchar);
+		
 		
 				currentchar=array.charAt(i);
 				upto=upto+currentchar;
 				String temp=new StringBuffer(array).deleteCharAt(i).toString();
-				//upto=Character.toString(array.charAt(i));
-		//		System.out.println("sending "+currentchar+" "+ array);
+				
+				System.out.println("for "+array.charAt(i));
+				System.out.println("remaining array "+temp);
 				permute(currentchar,temp,num,upto,originallength);
 				upto=new StringBuffer(upto).delete(originallength-num,(originallength-1)).toString();
 				temp=array;
@@ -388,12 +391,15 @@ public class Utility {
 		int []j= new int[array.length()];
 		for(i=0;i<array.length();i++) {
 			System.out.println(i);
-			temp= new StringBuilder(array).deleteCharAt(i).toString();			
+			temp= new StringBuilder(array).deleteCharAt(i).toString();
+			
 			currentchar=array.charAt(i);	
 			//findString(currentchar,temp,"",0,j,i,array.length()); 
 			System.out.println("for "+array.charAt(i));
+			System.out.println("remaining array "+temp);
 			permute(currentchar,temp,0,Character.toString(array.charAt(i)),array.length());
 			temp=array;
+			
 		}	
 	}
 
@@ -855,9 +861,9 @@ public class Utility {
 		return array;
 	}
 	
-	static String [] swipeInt(String array[],int index,int till) {
+	static String [] swipeString(String array[],int index,int till) {
 		int j;
-		for(j=index;j>=1;j--) {
+		for(j=index;j>=till+1;j--) {
 			array[j]=array[j-1];
 		}
 		return array;
@@ -896,7 +902,7 @@ public class Utility {
 					if(array[j].compareTo(array[i])>1) {
 					temp=array[i];
 					index=i;
-					array=swipeInt(array,index,i);
+					array=swipeString(array,index,i);
 					array[j]=temp;		
 					//System.out.println("Array after swipe ");
 				//	for(int c=0;c<length;c++)System.out.print(" "+array[c]);
@@ -1101,19 +1107,218 @@ public class Utility {
 	
 	void wordList() throws IOException {
 		
-		FileWriter fw=new FileWriter("WordList.txt");
-		int i,j;
+		int i,j,k,count=0,t=0;
 		String strings;
+		/*
+		FileWriter fw=new FileWriter("WordList.txt");
+		
 		System.out.println("Please enter the number of words you wish to add to file");
 		i=s.nextInt();
+		System.out.println("Please enter the words ");
+
 		for(j=0;j<i;j++) {
 			strings=s.next();
-			fw.write(strings+',');
+			fw.write(strings);
+			if(j<i-1) fw.write(',');//add , at end of each word but not for the last word.
 		}
+		System.out.print("lines added sucessfully");
 		fw.close();
-		
+		*/
 		FileReader fr=new FileReader("WordList.txt");
 		
+		/*
+		for(j=0;fr.read()!=-1;j++) {
+			fr.read();
+		}
+		*/
+		//fr.close();
+		String ch,data[]=new String[10];		//data has complete line read from the file
+		
+		BufferedReader br=new BufferedReader(new FileReader("WordList.txt"));
+		i=0;
+		 do {
+			 
+			ch=br.readLine();
+			
+		//	if(ch==null) break;
+			data[i]=ch; //enter each line to data
+			i++; //counting number of lines;
+		 }while(ch!=null);
+		
+		 
+		 char c;
+		 String s[]; 
+		 j=0;
+		 while(j<i) {  //j less than number of lines in file
+			 k=0;
+			 t=0;
+			 count=0;
+			 if(i==(j+1)) break;
+			 while(k<data[j].length()) {
+				 c=data[j].charAt(k);
+				
+				 if(c==',') count++; //count is counting number of ',' to know number of words in the jth line. 
+				 k++;
+			 }
+			 
+			 s=new String[count+1]; //string of number of words in first line
+			 for(k=0;k<count+1;k++) {  //till number of words in each line are over k = number of words
+				 s[k]=""; //adding each word to array of strings and default the first char of string is empty
+				 
+				 c=data[j].charAt(t); //each char of jth line
+				 for(;t<data[j].length();t++) { 
+					 
+					 c=data[j].charAt(t); 
+					 if(c==',') { 
+						 t++;
+						 break;
+					 }
+					 s[k]=s[k]+c;
+				 }
+		//		 System.out.println("word "+s[k]);
+			 }
+			 System.out.println("Strings in "+(j+1)+"st line are");
+			 for(t=0;t<=count;t++) {
+				 System.out.println(s[t]);
+			 }
+			 j++;
+		 }
+	
 	}
+
+	char[] swipeChar(char []array,int index,int till) {
+		int j;
+		for(j=index;j>=till+1;j--) {
+			array[j]=array[j-1];
+		}
+		return array;
+	}
+		
+	void insertionsortinstring() {
+		
+		int i,j,index;
+		char temp;
+		String string;
+		System.out.println("Enter the string ");
+		string=s.next();
+		char array[]=new char[string.length()];
+		for(i=0;i<string.length();i++) {
+			array[i]=string.charAt(i);
+		}
+		
+		for(j=0;j<string.length();j++) {	
+			//System.out.println("In j= "+j);
+				for(i=j+1;i<string.length();i++) {
+						if(array[j]>array[i]) {
+						temp=array[i];
+						index=i;
+						array=swipeChar(array,index,j);
+						array[j]=temp;		
+						System.out.println("Array after swipe ");
+						for(int c=0;c<array.length;c++)System.out.print(" "+array[c]);
+						System.out.println();						
+					}
+				}
+			}
+		System.out.println("After sort");
+		for(int c=0;c<array.length;c++)System.out.print(array[c]);
+	}
+	
+	void bubbleIntList() {
+		
+		int n,i,j,temp;
+		ArrayList<Integer> intlist=new ArrayList<Integer>();
+		System.out.println("Enter the numbers of intergers");
+		n=s.nextInt();
+		System.out.println("Enter the numbers for integers array");
+		//Enter elements in list
+		for(i=0;i<n;i++) intlist.add(i,s.nextInt());
+		
+		for(i=0;i<n-1;i++) {
+			for(j=0;j<n-1;j++) {
+				if(intlist.get(j)>intlist.get(j+1)) {
+					temp=intlist.get(j);
+					intlist.set(j,intlist.get(j+1));
+					intlist.set(j+1,temp);
+				}
+			}
+		}
+		System.out.println("The sorted list after sorting is ");
+		for(i=0;i<n;i++) System.out.print(" "+intlist.get(i));
+
+	}	
+
+	int [] merge(int a[],int length1) {
+		
+		if(length1==1) return a;
+		else {
+		int c[]=new int [length1], b[]=new int[(length1/2)+1],length=length1;
+		int i=0,high=length,low=0;
+		int result1[]=new int[length/2];
+		int result2[]=new int[length/2];
+		int mid=low+((high-low)/2);
+		for(i=0;i<length/2;i++) {
+			b[i]=a[(mid)+i];
+		}
+			length=length/2;
+			result1=merge(a,length);
+			result2=merge(b,length);
+			
+			for(i=0;i<length1;i++) {
+				high=0;
+				low=0;
+			if(result1[high]<
+					result2[low]) {
+				a[i]=result1[high];
+				high++;
+			}else {
+				a[i]=result2[low];
+				low++;		
+			}
+				
+				return a;
+		}
+		
+		}
+		return a;
+	}
+	
+	void mergeSortInt() {
+		
+		int i,j;
+		
+		System.out.println("Enter the size of array");
+		i=s.nextInt();
+		int a[]=new int[i];
+		System.out.println("Enter the elements in the array");
+		for(j=0;j<i;j++) a[j]=s.nextInt();
+		
+		a=merge(a,i);
+		System.out.println("After sort ");
+		
+		for(j=0;j<i;j++) System.out.println(a[j]+" ");
+		
+	}
+	
+	void vendingMachine() {
+		
+		int count=0,num,i,noteno,atm[]={
+				1000,500,100,50,10,5,2,1
+		};
+		
+		System.out.println("Enter the amount to be withdrawn ");
+		num=s.nextInt();
+		for(i=0;i<atm.length && num>0;i++) {
+			if(num/atm[i]>0) {
+				noteno=num/atm[i];
+				count=count+noteno;
+				num=num-(noteno*atm[i]);
+				System.out.println("number of "+atm[i]+"'s note required: "+noteno);
+				noteno=0;
+			}
+		}
+		System.out.println("Minimun number of notes required: "+count);
+	}
+
 	
 }
