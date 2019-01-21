@@ -17,6 +17,7 @@ import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
+
 public class Utility {
 	
 	static Scanner s=new Scanner(System.in);
@@ -1248,40 +1249,56 @@ public class Utility {
 
 	}	
 
-	int [] merge(int a[],int length1) {
+	int count=0;
+	
+	int a[]= new int[] {
+		9,8,7,6,5	
+	};
+	
+	int [] combine(int a[],int low,int mid,int range) {
 		
-		if(length1==1) return a;
-		else {
-		int c[]=new int [length1], b[]=new int[(length1/2)+1],length=length1;
-		int i=0,high=length,low=0;
-		int result1[]=new int[length/2];
-		int result2[]=new int[length/2];
-		int mid=low+((high-low)/2);
-		for(i=0;i<length/2;i++) {
-			b[i]=a[(mid)+i];
-		}
-			length=length/2;
-			result1=merge(a,length);
-			result2=merge(b,length);
+		/*
+		 * j=range, i till mid, k til range
+		 */
+		int j,i=low,k=mid ;
+		int []c=new int [range-low+1];
+		for(j=0;j<range-low+1;j++) {
 			
-			for(i=0;i<length1;i++) {
-				high=0;
-				low=0;
-			if(result1[high]<
-					result2[low]) {
-				a[i]=result1[high];
-				high++;
-			}else {
-				a[i]=result2[low];
-				low++;		
+			if(k==range/2 && i<mid) {
+				c[j]=a[i];
+				i++;
 			}
-				
-				return a;
+			else if(i==mid && k<range) {
+				c[j]=a[k];
+				k++;
+			}
+			else {	
+		if(a[k]<a[i] && k<range) {
+			c[j]=a[k];
+			k++;
+		}else if(a[k]>a[i] &&  i<mid){
+			c[j]=a[i];
+			i++;		                           
 		}
-		
-		}
-		return a;
+			
 	}
+		}
+		for (i=0;i<=range;i++) System.out.print(" "+c[i]);
+		System.out.println();
+		
+		return c;
+	}
+
+	void merge(int a[],int low,int range) {
+
+		int mid=low+(range-low)/2;
+	
+		if(low<range) {
+			merge(a,low,mid);
+			merge(a,mid+1,range);
+			combine(a,low,mid,range);
+			}
+		}	
 	
 	void mergeSortInt() {
 		
@@ -1289,16 +1306,52 @@ public class Utility {
 		
 		System.out.println("Enter the size of array");
 		i=s.nextInt();
-		int a[]=new int[i];
-		System.out.println("Enter the elements in the array");
-		for(j=0;j<i;j++) a[j]=s.nextInt();
-		
-		a=merge(a,i);
+		//int a[]=new int[i];
+//		System.out.println("Enter the elements in the array");
+//		for(j=0;j<i;j++) a[j]=s.nextInt();
+//		
+		merge(a,0,i-1);
 		System.out.println("After sort ");
 		
 		for(j=0;j<i;j++) System.out.println(a[j]+" ");
 		
 	}
+
+	
+	void dayofWeek() {
+		int d,y,m,y0,x,m0,d0;
+		
+		System.out.println("plese entger the date in dd mm yy format ");
+		d=s.nextInt();
+		m=s.nextInt();
+		y=s.nextInt();
+		
+		y0=y-(14-m)/12;
+		x=y0+y0/4-y0/100+y0/400;
+		m0=m+12*((14-m)/12)-2;
+		d0=(d+x+(31*m)/12)%7;
+		
+		String months[]=new String[] {
+				"January","Feb","March","April","May","June","July","August","September","October","November",
+						"December"
+		};
+		String days[]= {"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"};
+				
+		System.out.println("The day on this date is "+days[d0-1]);
+	
+	}
+		
+	void temprature() {
+			
+			System.out.println("To convert temprature from celcius to farenheit press 1");
+			System.out.println("To convert the temprature from farenheit to celcius press 2");
+			int i=s.nextInt();
+			System.out.println("Enter the temprarture");
+			float temp=s.nextFloat();
+			
+			if(i==1) System.out.println((temp*9/5)+32+"F");
+			else System.out.println((temp-32)*5/9+"C");
+		}
 	
 	void vendingMachine() {
 		
@@ -1320,5 +1373,129 @@ public class Utility {
 		System.out.println("Minimun number of notes required: "+count);
 	}
 
+	void monthlyPayment() {
+		
+		int P,Y,R;
+		float n,r,payment,deno;
+		System.out.println("Enter the values of Principal loan,  Years and Rate of interest");
+		
+		P=s.nextInt();
+		Y=s.nextInt();
+		R=s.nextInt();
+		
+		n=12*Y;
+		r=R/1200f;
+		System.out.println("r: "+r);
+		deno=1+r;
+		System.out.println("1+r: "+deno);
+		
+		//calculating (1+r)^n
+		
+		for(int i=1;i<n;i++) {
+			deno=deno*(1+r);
+		}
+		
+		deno=(float) (1.0/deno);
+		
+		payment=(P*r)/(1-deno);
+
+		//System.out.println("The interest amount is "+(R*P/100));
+		System.out.println("The payment to be done monthly is "+payment);
+	}
+
+	void sqrt() {
+		
+		System.out.println("Enter the value for which you wish to find the square root");
+		
+		double c=s.nextDouble(),t=c;
+		
+		while(Math.abs(t-c/t)>1e-15) t=(t+c/t)/2;
+		
+		System.out.println("The square root of "+c+" is "+t);
+	}
+
+	int [] toBinary(int num) {
+		
+		int count,i=0,power=1;
+		
+		//calculating the power of 2 just greater than number
+		for(;num>=power;i++) {
+			power*=2;
+		}
+		/*
+		 * values store 1,2,4,8
+		 * nums store which number will be used to calculate the number
+		 */
+		count=i;
+		int values[]=new int [i], nums[]=new int[i];
+		//storing values 16 8 4 2 in values
+		for(i=0;power>1;i++) {
+			power=power/2;
+			values[i]=power;
+		} 
+		count=i;
+		for(i=0;i<count;i++) System.out.print(" "+values[i]);
+		System.out.println();
+		i=0;
+		while(num>0) {
+			// printing 1 for only those numbers which will be used to calculate  number
+			if(num>=values[i]) {
+				num=num-values[i];
+				nums[i]=1;
+				System.out.print("1");
+			}else System.out.print("0");
+			i++;
+		}
+		System.out.println();
+		count--;
+		int nums8bit[]=new int[8];
+		for(i=7;count>=0;i--) {
+			nums8bit[i]=nums[count];
+			count--;
+		}
+		System.out.println("In 8 bits");
+		for(i=0;i<8;i++) System.out.print(nums8bit[i]);
+		System.out.println();
+		
+		return nums8bit;
+	}
+	int twoPowerN(int a) {
+		
+		int i,num=1;
+		for(i=0;i<a;i++) {
+			num*=2;
+		}
+		return num;
+	}
+	
+	
+	void nibblesSwap() {
+		
+		System.out.println("Enter the number ");
+		int temp,i,num=s.nextInt();
+		int[] binnum = new int [8];
+		binnum=toBinary(num);
+		
+		for(i=0;i<4;i++) {
+			temp=binnum[i];
+			binnum[i]=binnum[4+i];
+			binnum[4+i]=temp;
+		}
+		System.out.println("New binary array is ");
+		for(i=0;i<8;i++) System.out.print(binnum[i]);
+		System.out.println();
+		num=0;
+		for(i=0;i<8;i++) {
+			if(binnum[i]==1) {
+				num=num+twoPowerN(7-i);
+			}
+		}
+		System.out.println("new number is "+num);
+		
+		if(check2Power(num)==1) System.out.println(num+" is a power of 2");
+		else System.out.println(num+" is not power of 2");
+		
+		
+	}
 	
 }

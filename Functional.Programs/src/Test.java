@@ -61,10 +61,17 @@ public class Test {
 		U.guessGame(Integer.parseInt(args[0]));
 		U.wordList();
 		U.insertionsortinstring();
+		U.bubbleIntList();
+		U.vendingMachine();
+		U.mergeSortInt();
+		U.dayofWeek();
+		U.temprature();
+		U.monthlyPayment();
+		U.sqrt();
 		*/
-
-		//U.bubbleIntList();
-		//U.vendingMachine();
-		U.permutations();
+		
+		//U.nibblesSwap();
+		U.nibblesSwap();
+	
 	}
 }
