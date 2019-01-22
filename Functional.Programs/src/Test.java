@@ -63,7 +63,7 @@ public class Test {
 		U.insertionsortinstring();
 		U.bubbleIntList();
 		U.vendingMachine();
-		U.mergeSortInt();
+		U.mergeSort();
 		U.dayofWeek();
 		U.temprature();
 		U.monthlyPayment();
@@ -71,7 +71,6 @@ public class Test {
 		*/
 		
 		//U.nibblesSwap();
-		U.nibblesSwap();
-	
+		U.permutations();
 	}
 }

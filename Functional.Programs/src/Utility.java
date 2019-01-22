@@ -354,51 +354,42 @@ public class Utility {
 	}
 
 		
-	void permute(char currentchar,String array,int num,String upto,int originallength) {
-		int i;
-		num++;
-		
-	//	System.out.println("Received "+currentchar+" "+array);
-		if(num==originallength-1) {
-			System.out.println("String is "+upto+" "+currentchar);
-			return;
-		}
-		else {
-			for(i=0;i<originallength-num;i++) {
-				
-		
-		
-				currentchar=array.charAt(i);
-				upto=upto+currentchar;
-				String temp=new StringBuffer(array).deleteCharAt(i).toString();
-				
-				System.out.println("for "+array.charAt(i));
-				System.out.println("remaining array "+temp);
-				permute(currentchar,temp,num,upto,originallength);
-				upto=new StringBuffer(upto).delete(originallength-num,(originallength-1)).toString();
-				temp=array;
+	void permute(String upto, String remaining,int num) {
+			num++;
+			int i=0;
+			String temp1=upto,temp2=remaining;
+			
+			if(remaining.isEmpty()) {
+				System.out.print(" "+upto);
+				return;
 			}
-			return;
-		}
+			else {
+				while(i<remaining.length()) {					
+					upto=upto+remaining.charAt(i);
+					remaining= new StringBuilder(remaining).deleteCharAt(i).toString();
+					permute(upto,remaining,num);
+					remaining=temp2; //getting back so that we can switch to next character
+					upto=temp1;
+					i++;
+				}
+			}
 	}
 	
 	void permutations() {
 		String array,temp,upto;
-		char currentchar;
+		String current;
 		System.out.println("Enter the string");
 		array=s.next();
 		temp=array;
 		int i;
 		int []j= new int[array.length()];
 		for(i=0;i<array.length();i++) {
-			System.out.println(i);
-			temp= new StringBuilder(array).deleteCharAt(i).toString();
-			
-			currentchar=array.charAt(i);	
-			//findString(currentchar,temp,"",0,j,i,array.length()); 
+					
 			System.out.println("for "+array.charAt(i));
-			System.out.println("remaining array "+temp);
-			permute(currentchar,temp,0,Character.toString(array.charAt(i)),array.length());
+			current=""+array.charAt(i);
+			temp=new StringBuilder(array).deleteCharAt(i).toString();
+			permute(current,temp,1);
+			System.out.println();
 			temp=array;
 			
 		}	
@@ -1055,12 +1046,12 @@ public class Utility {
 
 	int check2Power(int num) {
 		int flag=0;
-		while(num%2==0) {
-			if(num%2==0) {
+		while(num%2==0) {  //num divisible by 2
+			if(num%2==0) { 
 				num=num/2;
 				power++;
 			}
-			if(num/2==1 && num%2==0) {
+			if(num/2==1 && num%2==0) { //checking basically for num 2 when 2 comes at last after dividing it is a power of 2
 				flag=1;
 				break;
 			}
@@ -1251,70 +1242,90 @@ public class Utility {
 
 	int count=0;
 	
-	int a[]= new int[] {
-		9,8,7,6,5	
-	};
-	
-	int [] combine(int a[],int low,int mid,int range) {
+	String [] combine(String a[],int la,String b[],int lb) {
 		
 		/*
-		 * j=range, i till mid, k til range
+		 * j for total array combined,i for a, k is for b
 		 */
-		int j,i=low,k=mid ;
-		int []c=new int [range-low+1];
-		for(j=0;j<range-low+1;j++) {
+		int j,i=0,k=0;
+		
+//		System.out.print("combining ");
+//		for(i=0;i<la;i++)System.out.print(a[i]);
+//		System.out.print(" and ");
+//		for(i=0;i<lb;i++)System.out.print(b[i]);
+//		System.out.println();
+		
+		String []c=new String [la+lb];
+		i=0;
+		for(j=0;j<c.length;j++) {
 			
-			if(k==range/2 && i<mid) {
-				c[j]=a[i];
+			if(k>=lb && i<la) {
+				c[j]=""+a[i];
 				i++;
 			}
-			else if(i==mid && k<range) {
-				c[j]=a[k];
+			else if(i>=la && k<lb) {
+				c[j]=""+a[k];
 				k++;
 			}
 			else {	
-		if(a[k]<a[i] && k<range) {
-			c[j]=a[k];
+		if(b[k].compareTo(a[i])<1 && k<lb) {
+			c[j]=""+b[k];
 			k++;
-		}else if(a[k]>a[i] &&  i<mid){
-			c[j]=a[i];
+		}else if(b[k].compareTo(a[i])>1 && i<la){
+			c[j]=""+a[i];
 			i++;		                           
 		}
 			
 	}
 		}
-		for (i=0;i<=range;i++) System.out.print(" "+c[i]);
+		for (i=0;i<=(la+lb-1);i++) System.out.print(" "+c[i]);
 		System.out.println();
 		
 		return c;
 	}
 
-	void merge(int a[],int low,int range) {
-
-		int mid=low+(range-low)/2;
-	
-		if(low<range) {
-			merge(a,low,mid);
-			merge(a,mid+1,range);
-			combine(a,low,mid,range);
-			}
+	String [] merge(String a[],int low,int high) {
+		
+		
+		int i,mid=low+(high-low)/2;
+		String r1[]=new String [mid-low+1],r2[]= new String[high-mid];
+		String c[]=new String[high-low+1];
+		if(low<high) {
+//			System.out.print("Merging ");
+//			for(i=low;i<=mid;i++) System.out.print(a[i]);
+//			System.out.println();
+			
+			r1=merge(a,low,mid); //storing 1st half 
+		
+//			System.out.print("Merging ");
+//			for(i=mid+1;i<=high;i++) System.out.print(a[i]);
+//			System.out.println();
+			
+			r2=merge(a,mid+1,high);
+			
+			c=combine(r1,(mid-low+1),r2,high-mid); //storing results of both the arrays 
+			
+			return c;
+		}	
+		else {
+			c[0]=""+a[low];
+			return c;
+		}
 		}	
 	
-	void mergeSortInt() {
+	void mergeSort() {
 		
 		int i,j;
 		
 		System.out.println("Enter the size of array");
 		i=s.nextInt();
-		//int a[]=new int[i];
-//		System.out.println("Enter the elements in the array");
-//		for(j=0;j<i;j++) a[j]=s.nextInt();
-//		
-		merge(a,0,i-1);
-		System.out.println("After sort ");
+		String a[]=new String[i];
+		System.out.println("Enter the elements in the array");
+		for(j=0;j<i;j++) a[j]=s.next();
 		
-		for(j=0;j<i;j++) System.out.println(a[j]+" ");
-		
+		a=merge(a,0,i-1);
+		System.out.println("After sort ");	
+		for(j=0;j<i;j++) System.out.println(a[j]+" ");		
 	}
 
 	
@@ -1422,7 +1433,10 @@ public class Utility {
 		for(;num>=power;i++) {
 			power*=2;
 		}
+		
+		
 		/*
+		 * count will keep track of n in 2^n
 		 * values store 1,2,4,8
 		 * nums store which number will be used to calculate the number
 		 */
@@ -1439,6 +1453,7 @@ public class Utility {
 		i=0;
 		while(num>0) {
 			// printing 1 for only those numbers which will be used to calculate  number
+			//also storing the value 1 for the numbers that are used
 			if(num>=values[i]) {
 				num=num-values[i];
 				nums[i]=1;
@@ -1497,5 +1512,7 @@ public class Utility {
 		
 		
 	}
+	
+	
 	
 }
