@@ -17,11 +17,9 @@ import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
-
 public class Utility {
 	
-	static Scanner s=new Scanner(System.in);
-	
+	static Scanner s=new Scanner(System.in);	
 	//This class is used to create a linked list of users
 	class Users{
 		String username,name;
@@ -1483,7 +1481,6 @@ public class Utility {
 		return num;
 	}
 	
-	
 	void nibblesSwap() {
 		
 		System.out.println("Enter the number ");
@@ -1512,7 +1509,12 @@ public class Utility {
 		
 		
 	}
-	
-	
+
+	/*
+	 * 	**********************Data Structure************************
+	 */
+
+		
 	
 }
+	
